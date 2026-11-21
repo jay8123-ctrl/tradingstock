@@ -1,0 +1,482 @@
+{
+  "BT-031": {
+    "summary": {
+      "bt_id": "BT-031",
+      "idea_id": "SW-01",
+      "name": "RSI(2)<10 Uptrend Pullback",
+      "market": "US",
+      "trades": 1240,
+      "net_ret_pct": 129.45,
+      "cagr_pct": 21.98,
+      "max_dd_pct": -23.64,
+      "sharpe": 1.0,
+      "win_rate_pct": 65.9,
+      "pf": 1.2,
+      "avg_r": 0.061,
+      "ret_2x_cost_pct": 69.74,
+      "mc95_dd_pct": -40.72,
+      "rand_base_pct": 89.7,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 1216,
+      "net_ret_pct": 129.51,
+      "cagr_pct": 23.88,
+      "max_dd_pct": -23.64,
+      "sharpe": 1.04,
+      "win_rate_pct": 66.0,
+      "pf": 1.2,
+      "avg_r": 0.063
+    },
+    "stress_2x_cost": {
+      "trades": 1240,
+      "net_ret_pct": 69.74,
+      "cagr_pct": 13.49,
+      "max_dd_pct": -32.4,
+      "sharpe": 0.68,
+      "win_rate_pct": 64.2,
+      "pf": 1.12,
+      "avg_r": 0.035
+    }
+  },
+  "BT-032": {
+    "summary": {
+      "bt_id": "BT-032",
+      "idea_id": "SW-02",
+      "name": "RSI(2)<15 + Above SMA50 Pullback",
+      "market": "US",
+      "trades": 962,
+      "net_ret_pct": 65.82,
+      "cagr_pct": 12.86,
+      "max_dd_pct": -21.57,
+      "sharpe": 0.74,
+      "win_rate_pct": 65.0,
+      "pf": 1.18,
+      "avg_r": 0.056,
+      "ret_2x_cost_pct": 31.15,
+      "mc95_dd_pct": -29.22,
+      "rand_base_pct": 63.94,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 952,
+      "net_ret_pct": 66.32,
+      "cagr_pct": 14.01,
+      "max_dd_pct": -21.57,
+      "sharpe": 0.78,
+      "win_rate_pct": 65.0,
+      "pf": 1.18,
+      "avg_r": 0.057
+    },
+    "stress_2x_cost": {
+      "trades": 962,
+      "net_ret_pct": 31.15,
+      "cagr_pct": 6.7,
+      "max_dd_pct": -26.57,
+      "sharpe": 0.44,
+      "win_rate_pct": 62.9,
+      "pf": 1.1,
+      "avg_r": 0.029
+    }
+  },
+  "BT-033": {
+    "summary": {
+      "bt_id": "BT-033",
+      "idea_id": "SW-03",
+      "name": "3-Day Pullback in Strong Uptrend",
+      "market": "US",
+      "trades": 414,
+      "net_ret_pct": 24.23,
+      "cagr_pct": 5.33,
+      "max_dd_pct": -24.16,
+      "sharpe": 0.36,
+      "win_rate_pct": 59.7,
+      "pf": 1.12,
+      "avg_r": 0.043,
+      "ret_2x_cost_pct": 12.76,
+      "mc95_dd_pct": -31.62,
+      "rand_base_pct": 13.03,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 409,
+      "net_ret_pct": 26.65,
+      "cagr_pct": 6.28,
+      "max_dd_pct": -24.16,
+      "sharpe": 0.4,
+      "win_rate_pct": 59.9,
+      "pf": 1.13,
+      "avg_r": 0.047
+    },
+    "stress_2x_cost": {
+      "trades": 414,
+      "net_ret_pct": 12.76,
+      "cagr_pct": 2.91,
+      "max_dd_pct": -25.79,
+      "sharpe": 0.24,
+      "win_rate_pct": 59.7,
+      "pf": 1.07,
+      "avg_r": 0.026
+    }
+  },
+  "BT-034": {
+    "summary": {
+      "bt_id": "BT-034",
+      "idea_id": "SW-04",
+      "name": "20d Donchian Breakout + Vol Surge",
+      "market": "US",
+      "trades": 283,
+      "net_ret_pct": 119.67,
+      "cagr_pct": 20.71,
+      "max_dd_pct": -12.47,
+      "sharpe": 1.23,
+      "win_rate_pct": 44.9,
+      "pf": 1.59,
+      "avg_r": 0.243,
+      "ret_2x_cost_pct": 105.17,
+      "mc95_dd_pct": -24.56,
+      "rand_base_pct": 34.65,
+      "status": "PASS"
+    },
+    "oos_2023_2026": {
+      "trades": 276,
+      "net_ret_pct": 129.28,
+      "cagr_pct": 23.85,
+      "max_dd_pct": -12.47,
+      "sharpe": 1.34,
+      "win_rate_pct": 46.0,
+      "pf": 1.62,
+      "avg_r": 0.265
+    },
+    "stress_2x_cost": {
+      "trades": 283,
+      "net_ret_pct": 105.17,
+      "cagr_pct": 18.76,
+      "max_dd_pct": -13.18,
+      "sharpe": 1.13,
+      "win_rate_pct": 44.5,
+      "pf": 1.52,
+      "avg_r": 0.218
+    }
+  },
+  "BT-035": {
+    "summary": {
+      "bt_id": "BT-035",
+      "idea_id": "SW-05",
+      "name": "Cross-Sectional Momentum Pullback (Mom60>5% + RSI2<20)",
+      "market": "US",
+      "trades": 826,
+      "net_ret_pct": 234.21,
+      "cagr_pct": 33.46,
+      "max_dd_pct": -21.36,
+      "sharpe": 1.42,
+      "win_rate_pct": 67.4,
+      "pf": 1.36,
+      "avg_r": 0.087,
+      "ret_2x_cost_pct": 161.88,
+      "mc95_dd_pct": -39.06,
+      "rand_base_pct": 67.99,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 803,
+      "net_ret_pct": 230.76,
+      "cagr_pct": 36.12,
+      "max_dd_pct": -21.36,
+      "sharpe": 1.48,
+      "win_rate_pct": 67.5,
+      "pf": 1.36,
+      "avg_r": 0.088
+    },
+    "stress_2x_cost": {
+      "trades": 826,
+      "net_ret_pct": 161.88,
+      "cagr_pct": 25.89,
+      "max_dd_pct": -21.81,
+      "sharpe": 1.16,
+      "win_rate_pct": 65.6,
+      "pf": 1.28,
+      "avg_r": 0.065
+    }
+  },
+  "BT-036": {
+    "summary": {
+      "bt_id": "BT-036",
+      "idea_id": "SW-06",
+      "name": "Mean-Reversion Dip Below SMA20 in Bull Trend",
+      "market": "US",
+      "trades": 286,
+      "net_ret_pct": 74.72,
+      "cagr_pct": 14.28,
+      "max_dd_pct": -17.04,
+      "sharpe": 1.02,
+      "win_rate_pct": 70.6,
+      "pf": 1.67,
+      "avg_r": 0.133,
+      "ret_2x_cost_pct": 63.75,
+      "mc95_dd_pct": -12.79,
+      "rand_base_pct": 11.72,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 282,
+      "net_ret_pct": 75.93,
+      "cagr_pct": 15.68,
+      "max_dd_pct": -17.04,
+      "sharpe": 1.07,
+      "win_rate_pct": 70.9,
+      "pf": 1.69,
+      "avg_r": 0.136
+    },
+    "stress_2x_cost": {
+      "trades": 286,
+      "net_ret_pct": 63.75,
+      "cagr_pct": 12.52,
+      "max_dd_pct": -17.29,
+      "sharpe": 0.91,
+      "win_rate_pct": 70.6,
+      "pf": 1.58,
+      "avg_r": 0.117
+    }
+  },
+  "BT-037": {
+    "summary": {
+      "bt_id": "BT-037",
+      "idea_id": "SW-01",
+      "name": "RSI(2)<10 Uptrend Pullback",
+      "market": "MY",
+      "trades": 1126,
+      "net_ret_pct": -25.25,
+      "cagr_pct": -6.74,
+      "max_dd_pct": -38.67,
+      "sharpe": -0.31,
+      "win_rate_pct": 57.5,
+      "pf": 0.91,
+      "avg_r": -0.025,
+      "ret_2x_cost_pct": -79.52,
+      "mc95_dd_pct": -45.9,
+      "rand_base_pct": -53.22,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 1063,
+      "net_ret_pct": -23.25,
+      "cagr_pct": -6.59,
+      "max_dd_pct": -38.67,
+      "sharpe": -0.29,
+      "win_rate_pct": 57.9,
+      "pf": 0.91,
+      "avg_r": -0.021
+    },
+    "stress_2x_cost": {
+      "trades": 1097,
+      "net_ret_pct": -79.52,
+      "cagr_pct": -31.63,
+      "max_dd_pct": -79.96,
+      "sharpe": -2.18,
+      "win_rate_pct": 44.1,
+      "pf": 0.56,
+      "avg_r": -0.149
+    }
+  },
+  "BT-038": {
+    "summary": {
+      "bt_id": "BT-038",
+      "idea_id": "SW-02",
+      "name": "RSI(2)<15 + Above SMA50 Pullback",
+      "market": "MY",
+      "trades": 784,
+      "net_ret_pct": -1.95,
+      "cagr_pct": -0.47,
+      "max_dd_pct": -15.83,
+      "sharpe": 0.02,
+      "win_rate_pct": 59.1,
+      "pf": 0.99,
+      "avg_r": 0.001,
+      "ret_2x_cost_pct": -59.59,
+      "mc95_dd_pct": -27.15,
+      "rand_base_pct": -42.01,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 757,
+      "net_ret_pct": 0.28,
+      "cagr_pct": 0.07,
+      "max_dd_pct": -15.83,
+      "sharpe": 0.07,
+      "win_rate_pct": 59.3,
+      "pf": 1.0,
+      "avg_r": 0.005
+    },
+    "stress_2x_cost": {
+      "trades": 784,
+      "net_ret_pct": -59.59,
+      "cagr_pct": -19.53,
+      "max_dd_pct": -60.12,
+      "sharpe": -1.76,
+      "win_rate_pct": 45.2,
+      "pf": 0.58,
+      "avg_r": -0.126
+    }
+  },
+  "BT-039": {
+    "summary": {
+      "bt_id": "BT-039",
+      "idea_id": "SW-03",
+      "name": "3-Day Pullback in Strong Uptrend",
+      "market": "MY",
+      "trades": 225,
+      "net_ret_pct": -28.26,
+      "cagr_pct": -7.66,
+      "max_dd_pct": -31.39,
+      "sharpe": -0.6,
+      "win_rate_pct": 53.3,
+      "pf": 0.73,
+      "avg_r": -0.061,
+      "ret_2x_cost_pct": -43.9,
+      "mc95_dd_pct": -38.47,
+      "rand_base_pct": -14.17,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 215,
+      "net_ret_pct": -29.34,
+      "cagr_pct": -8.56,
+      "max_dd_pct": -31.39,
+      "sharpe": -0.66,
+      "win_rate_pct": 52.6,
+      "pf": 0.71,
+      "avg_r": -0.068
+    },
+    "stress_2x_cost": {
+      "trades": 225,
+      "net_ret_pct": -43.9,
+      "cagr_pct": -12.94,
+      "max_dd_pct": -45.09,
+      "sharpe": -1.09,
+      "win_rate_pct": 51.1,
+      "pf": 0.57,
+      "avg_r": -0.142
+    }
+  },
+  "BT-040": {
+    "summary": {
+      "bt_id": "BT-040",
+      "idea_id": "SW-04",
+      "name": "20d Donchian Breakout + Vol Surge",
+      "market": "MY",
+      "trades": 253,
+      "net_ret_pct": -40.83,
+      "cagr_pct": -11.82,
+      "max_dd_pct": -42.18,
+      "sharpe": -0.88,
+      "win_rate_pct": 28.1,
+      "pf": 0.65,
+      "avg_r": -0.177,
+      "ret_2x_cost_pct": -55.68,
+      "mc95_dd_pct": -52.25,
+      "rand_base_pct": -30.36,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 243,
+      "net_ret_pct": -35.79,
+      "cagr_pct": -10.79,
+      "max_dd_pct": -42.18,
+      "sharpe": -0.78,
+      "win_rate_pct": 29.2,
+      "pf": 0.69,
+      "avg_r": -0.158
+    },
+    "stress_2x_cost": {
+      "trades": 253,
+      "net_ret_pct": -55.68,
+      "cagr_pct": -17.73,
+      "max_dd_pct": -55.47,
+      "sharpe": -1.38,
+      "win_rate_pct": 26.1,
+      "pf": 0.52,
+      "avg_r": -0.3
+    }
+  },
+  "BT-041": {
+    "summary": {
+      "bt_id": "BT-041",
+      "idea_id": "SW-05",
+      "name": "Cross-Sectional Momentum Pullback (Mom60>5% + RSI2<20)",
+      "market": "MY",
+      "trades": 669,
+      "net_ret_pct": 1.16,
+      "cagr_pct": 0.28,
+      "max_dd_pct": -27.05,
+      "sharpe": 0.09,
+      "win_rate_pct": 59.2,
+      "pf": 1.01,
+      "avg_r": -0.0,
+      "ret_2x_cost_pct": -60.59,
+      "mc95_dd_pct": -35.76,
+      "rand_base_pct": -43.34,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 652,
+      "net_ret_pct": 5.43,
+      "cagr_pct": 1.37,
+      "max_dd_pct": -27.05,
+      "sharpe": 0.17,
+      "win_rate_pct": 59.5,
+      "pf": 1.02,
+      "avg_r": 0.005
+    },
+    "stress_2x_cost": {
+      "trades": 669,
+      "net_ret_pct": -60.59,
+      "cagr_pct": -20.01,
+      "max_dd_pct": -61.76,
+      "sharpe": -1.33,
+      "win_rate_pct": 48.7,
+      "pf": 0.67,
+      "avg_r": -0.103
+    }
+  },
+  "BT-042": {
+    "summary": {
+      "bt_id": "BT-042",
+      "idea_id": "SW-06",
+      "name": "Mean-Reversion Dip Below SMA20 in Bull Trend",
+      "market": "MY",
+      "trades": 151,
+      "net_ret_pct": -12.88,
+      "cagr_pct": -3.25,
+      "max_dd_pct": -22.66,
+      "sharpe": -0.31,
+      "win_rate_pct": 56.3,
+      "pf": 0.82,
+      "avg_r": -0.051,
+      "ret_2x_cost_pct": -25.9,
+      "mc95_dd_pct": -26.58,
+      "rand_base_pct": -5.68,
+      "status": "REJECT"
+    },
+    "oos_2023_2026": {
+      "trades": 145,
+      "net_ret_pct": -9.91,
+      "cagr_pct": -2.66,
+      "max_dd_pct": -22.66,
+      "sharpe": -0.24,
+      "win_rate_pct": 57.2,
+      "pf": 0.86,
+      "avg_r": -0.035
+    },
+    "stress_2x_cost": {
+      "trades": 151,
+      "net_ret_pct": -25.9,
+      "cagr_pct": -6.94,
+      "max_dd_pct": -30.44,
+      "sharpe": -0.73,
+      "win_rate_pct": 54.3,
+      "pf": 0.65,
+      "avg_r": -0.12
+    }
+  }
+}

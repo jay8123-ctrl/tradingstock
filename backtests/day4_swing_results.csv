@@ -1,0 +1,13 @@
+bt_id,idea_id,name,market,trades,net_ret_pct,cagr_pct,max_dd_pct,sharpe,win_rate_pct,pf,avg_r,ret_2x_cost_pct,mc95_dd_pct,rand_base_pct,status
+BT-034,SW-04,20d Donchian Breakout + Vol Surge,US,283,119.67,20.71,-12.47,1.23,44.9,1.59,0.243,105.17,-24.56,34.65,PASS
+BT-035,SW-05,Cross-Sectional Momentum Pullback (Mom60>5% + RSI2<20),US,826,234.21,33.46,-21.36,1.42,67.4,1.36,0.087,161.88,-39.06,67.99,REJECT
+BT-036,SW-06,Mean-Reversion Dip Below SMA20 in Bull Trend,US,286,74.72,14.28,-17.04,1.02,70.6,1.67,0.133,63.75,-12.79,11.72,REJECT
+BT-031,SW-01,RSI(2)<10 Uptrend Pullback,US,1240,129.45,21.98,-23.64,1.0,65.9,1.2,0.061,69.74,-40.72,89.7,REJECT
+BT-032,SW-02,RSI(2)<15 + Above SMA50 Pullback,US,962,65.82,12.86,-21.57,0.74,65.0,1.18,0.056,31.15,-29.22,63.94,REJECT
+BT-033,SW-03,3-Day Pullback in Strong Uptrend,US,414,24.23,5.33,-24.16,0.36,59.7,1.12,0.043,12.76,-31.62,13.03,REJECT
+BT-041,SW-05,Cross-Sectional Momentum Pullback (Mom60>5% + RSI2<20),MY,669,1.16,0.28,-27.05,0.09,59.2,1.01,-0.0,-60.59,-35.76,-43.34,REJECT
+BT-038,SW-02,RSI(2)<15 + Above SMA50 Pullback,MY,784,-1.95,-0.47,-15.83,0.02,59.1,0.99,0.001,-59.59,-27.15,-42.01,REJECT
+BT-037,SW-01,RSI(2)<10 Uptrend Pullback,MY,1126,-25.25,-6.74,-38.67,-0.31,57.5,0.91,-0.025,-79.52,-45.9,-53.22,REJECT
+BT-042,SW-06,Mean-Reversion Dip Below SMA20 in Bull Trend,MY,151,-12.88,-3.25,-22.66,-0.31,56.3,0.82,-0.051,-25.9,-26.58,-5.68,REJECT
+BT-039,SW-03,3-Day Pullback in Strong Uptrend,MY,225,-28.26,-7.66,-31.39,-0.6,53.3,0.73,-0.061,-43.9,-38.47,-14.17,REJECT
+BT-040,SW-04,20d Donchian Breakout + Vol Surge,MY,253,-40.83,-11.82,-42.18,-0.88,28.1,0.65,-0.177,-55.68,-52.25,-30.36,REJECT

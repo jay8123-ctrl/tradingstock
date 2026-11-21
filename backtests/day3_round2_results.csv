@@ -1,0 +1,8 @@
+bt_id,idea_id,name,market,tf,trades,net_ret_pct,max_dd_pct,win_rate_pct,profit_factor,sharpe,avg_trade_pct,status
+BT-029,SW-01,US 2-5d RSI(2)<10 Uptrend Swing,US,1d(5y),1725,31.72,-44.31,63.3,1.23,0.37,0.221,REJECT
+BT-024,ID-20v2,US Turnaround Monday (Bull+2%SL),US,1d(5y),262,3.98,-12.43,37.0,0.67,0.15,-0.251,REJECT
+BT-027,ID-16R,US 1h Bottom-2 Oversold Bounce (Bull),US,1h(~3y),442,-18.08,-25.5,44.8,0.87,-0.41,-0.088,REJECT
+BT-030,SW-02,MY 2-5d RSI(2)<10 Uptrend Swing,MY,1d(5y),1143,-58.74,-64.64,51.5,0.8,-0.61,-0.195,REJECT
+BT-028,ID-14,US 1h Strongest ETF Leader,US,1h(~3y),565,-33.6,-35.65,48.0,0.81,-1.0,-0.068,REJECT
+BT-026,ID-16,US 1h Top-2 Leaders (Bull),US,1h(~3y),1010,-58.07,-59.6,45.4,0.75,-2.01,-0.148,REJECT
+BT-025,ID-02,US 1h VWAP Pullback (Bull),US,1h(~3y),3524,-50.59,-50.61,43.3,0.67,-3.19,-0.115,REJECT
