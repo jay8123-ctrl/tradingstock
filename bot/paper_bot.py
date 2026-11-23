@@ -247,6 +247,27 @@ def scan_sw04_signals(market_bars: dict[str, pd.DataFrame]) -> list[dict[str, An
     return candidates
 
 
+def check_sw04_exit(df: pd.DataFrame, entry_date_str: str) -> tuple[bool, str]:
+    """
+    SW-04 Exit Rule: Close < SMA10 OR held >= 10 trading days.
+    """
+    if df.empty or len(df) < 12:
+        return False, ""
+    sma10 = float(df["close"].rolling(10).mean().iloc[-1])
+    last_c = float(df["close"].iloc[-1])
+    if last_c < sma10:
+        return True, f"CLOSE_BELOW_SMA10 ({last_c:.2f} < {sma10:.2f})"
+    if entry_date_str:
+        try:
+            entry_dt = pd.Timestamp(entry_date_str, tz="UTC")
+            bars_since = int((df.index.normalize() > entry_dt.normalize()).sum())
+            if bars_since >= MAX_HOLD_DAYS:
+                return True, f"MAX_HOLD_{MAX_HOLD_DAYS}D"
+        except Exception:
+            pass
+    return False, ""
+
+
 def run_alpaca_paper_cycle() -> None:
     load_dotenv(ROOT / ".env")
     mode = enforce_mode_guard(
@@ -267,8 +288,8 @@ def run_alpaca_paper_cycle() -> None:
         )
 
     from alpaca.trading.client import TradingClient
-    from alpaca.trading.requests import MarketOrderRequest, StopLossRequest
-    from alpaca.trading.enums import OrderSide, TimeInForce, OrderClass
+    from alpaca.trading.requests import MarketOrderRequest, StopLossRequest, GetOrdersRequest
+    from alpaca.trading.enums import OrderSide, TimeInForce, OrderClass, QueryOrderStatus
 
     client = TradingClient(api_key, api_secret, paper=(mode == "PAPER"))
     acct = client.get_account()
@@ -282,6 +303,76 @@ def run_alpaca_paper_cycle() -> None:
     today_str = now_utc.strftime("%Y-%m-%d")
     state.last_heartbeat_utc = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    # Load clean local daily bars
+    bars = {}
+    for sym in US_UNIVERSE:
+        p = ROOT / "data" / "clean" / "us" / "1d" / f"{sym}.parquet"
+        if p.exists():
+            bars[sym] = pd.read_parquet(p)
+
+    # 1. Check exits on existing broker positions (SW-04: Close < SMA10 or >= 10 trading days)
+    broker_pos = {p.symbol: p for p in client.get_all_positions()}
+    open_orders = client.get_orders(GetOrdersRequest(status=QueryOrderStatus.OPEN))
+
+    for sym, pos in list(broker_pos.items()):
+        if sym not in bars:
+            continue
+        meta = state.open_positions.get(sym, {})
+        should_exit, exit_reason = check_sw04_exit(bars[sym], meta.get("entry_date", ""))
+        if should_exit:
+            logger.info(f"EXIT SIGNAL {sym}: {exit_reason} -> closing position")
+            try:
+                # Cancel open stop orders for this symbol first so shares are unlocked
+                for o in open_orders:
+                    if o.symbol == sym:
+                        client.cancel_order_by_id(o.id)
+                client.close_position(sym)
+                pnl = float(pos.unrealized_pl)
+                risk_u = float(meta.get("risk_usd", 0.0))
+                r_mult = round(pnl / risk_u, 3) if risk_u > 0 else ""
+                append_trade_csv({
+                    "trade_id": f"SW04-{today_str}-{sym}",
+                    "strategy": "SW-04",
+                    "mode": mode,
+                    "market": "US",
+                    "side": "LONG",
+                    "entry_time": meta.get("entry_date", ""),
+                    "entry_price": float(pos.avg_entry_price),
+                    "size": float(pos.qty),
+                    "stop": meta.get("stop", ""),
+                    "target": "",
+                    "exit_time": now_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "exit_price": float(pos.current_price),
+                    "fees": 0.0,
+                    "funding": 0.0,
+                    "slippage": "",
+                    "pnl": round(pnl, 2),
+                    "r_multiple": r_mult,
+                    "reason_in": "20d_Donchian_Vol",
+                    "reason_out": exit_reason,
+                    "regime": "BULL_SMA200",
+                    "backtest_expected_r": 0.243,
+                    "notes": "Auto-closed by paper_bot.py",
+                })
+                state.open_positions.pop(sym, None)
+                broker_pos.pop(sym, None)
+                send_telegram(f"[平仓] {sym} | 原因: {exit_reason} | 估算盈亏: ${pnl:.2f} ({r_mult}R)")
+            except Exception as e:
+                logger.error(f"Failed to close {sym}: {e}")
+                log_incident("HIGH", "paper_bot", f"Exit failed for {sym}: {e}", "Broker API error", "Check manually")
+
+    # 2. Verify every remaining open position has an active exchange-side stop-loss
+    open_orders = client.get_orders(GetOrdersRequest(status=QueryOrderStatus.OPEN))
+    stop_syms = {o.symbol for o in open_orders if str(o.side).lower().endswith("sell") and o.stop_price is not None}
+    for sym in broker_pos:
+        if sym not in stop_syms:
+            msg = f"CRITICAL: Open position {sym} has NO active exchange stop-loss!"
+            logger.error(msg)
+            log_incident("CRITICAL", "paper_bot", msg, "Missing exchange stop", "Halted new entries; alert user")
+            state.halted_new_entries = True
+            state.halt_reason = msg
+
+    # 3. Check risk guards (-5% daily, -15% HWM circuit breaker)
     can_trade, reason = evaluate_risk_guards(state, equity, today_str)
     state.save()
     if not can_trade:
@@ -289,15 +380,7 @@ def run_alpaca_paper_cycle() -> None:
         log_incident("HIGH", "paper_bot", reason, "Risk limit triggered", "Halted new entries; stops preserved")
         return
 
-    # Load clean local daily bars for signal scan (or refresh via alpaca_intraday_downloader)
-    bars = {}
-    for sym in US_UNIVERSE:
-        p = ROOT / "data" / "clean" / "us" / "1d" / f"{sym}.parquet"
-        if p.exists():
-            bars[sym] = pd.read_parquet(p)
-
-    # Check broker positions
-    broker_pos = {p.symbol: p for p in client.get_all_positions()}
+    # 4. Scan for new SW-04 entries
     open_slots = MAX_POSITIONS - len(broker_pos)
     if open_slots <= 0:
         logger.info(f"Max slots full ({len(broker_pos)}/{MAX_POSITIONS}). No new entries.")
