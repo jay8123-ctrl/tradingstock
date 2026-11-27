@@ -16,6 +16,7 @@ import csv
 import json
 import logging
 import os
+import sys
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,6 +28,11 @@ import requests
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from risk.engine import Proposal, check as risk_engine_check
+
 STATE_PATH = ROOT / "bot" / "state.json"
 TRADES_CSV = ROOT / "trades.csv"
 INCIDENTS_MD = ROOT / "incidents.md"
@@ -154,26 +160,46 @@ def calculate_position_size(
     available_cash: float,
     entry_price: float,
     stop_price: float,
+    *,
+    symbol: str = "UNKNOWN",
+    open_positions: int = 0,
+    pnl_today: float = 0.0,
+    high_water_mark: float | None = None,
+    exposure: float | None = None,
 ) -> tuple[int, float]:
     """
-    Section 8.4 & 14: Risk-based sizing with 1x cash & 25% slot cap.
+    Section 8.4 & 14: Risk-based sizing routed through the human-owned risk/engine.py wall.
     HARD RULE: Refuses order if stop_price is missing or >= entry_price.
     Returns (shares_qty, risk_usd).
     """
     if stop_price is None or stop_price <= 0 or stop_price >= entry_price:
         raise ValueError("HARD RULE BLOCK: Valid exchange stop-loss (< entry_price) is mandatory before opening.")
-    stop_dist = entry_price - stop_price
-    stop_pct = stop_dist / entry_price
-    if stop_pct < MIN_STOP_PCT or stop_pct > MAX_STOP_PCT:
+
+    eff_exposure = max(0.0, equity - available_cash) if exposure is None else max(0.0, exposure)
+    proposal = Proposal(
+        symbol=symbol,
+        side="buy",
+        entry=float(entry_price),
+        stop=float(stop_price),
+        target=None,
+    )
+    approved_qty, status = risk_engine_check(
+        proposal,
+        equity=float(equity),
+        exposure=float(eff_exposure),
+        open_positions=int(open_positions),
+        pnl_today=float(pnl_today),
+        high_water_mark=high_water_mark,
+    )
+    if status != "APPROVED" or approved_qty <= 0:
+        logger.info(f"Risk wall rejected {symbol}: {status}")
         return 0, 0.0
-    risk_budget = equity * RISK_PER_TRADE
-    target_alloc = risk_budget / stop_pct
-    max_slot_usd = equity * MAX_SLOT_FRAC
-    alloc_usd = min(target_alloc, max_slot_usd, available_cash)
-    qty = int(alloc_usd // entry_price)
+
+    # Whole-share floor bounded by both risk engine approval and actual available cash
+    qty = min(int(approved_qty // 1), int(max(0.0, available_cash) // entry_price))
     if qty <= 0:
         return 0, 0.0
-    actual_risk = qty * stop_dist
+    actual_risk = qty * (entry_price - stop_price)
     return qty, round(actual_risk, 2)
 
 
@@ -389,13 +415,27 @@ def run_alpaca_paper_cycle() -> None:
     cands = [c for c in scan_sw04_signals(bars) if c["symbol"] not in broker_pos]
     logger.info(f"SW-04 scan complete: {len(cands)} candidate(s) found.")
 
+    current_exposure = sum(abs(float(p.market_value)) for p in broker_pos.values())
+    current_open = len(broker_pos)
+    pnl_today = equity - state.day_start_equity
+
     for cand in cands[:open_slots]:
         sym = cand["symbol"]
         entry_est = cand["signal_close"]
         stop_p = cand["suggested_stop"]
-        qty, risk_usd = calculate_position_size(equity, cash, entry_est, stop_p)
+        qty, risk_usd = calculate_position_size(
+            equity,
+            cash,
+            entry_est,
+            stop_p,
+            symbol=sym,
+            open_positions=current_open,
+            pnl_today=pnl_today,
+            high_water_mark=state.high_water_mark,
+            exposure=current_exposure,
+        )
         if qty <= 0:
-            logger.info(f"Skipping {sym}: qty=0 under 2% risk / 25% slot / cash constraints.")
+            logger.info(f"Skipping {sym}: qty=0 under risk/engine.py constraints.")
             continue
 
         # OTO order: Entry + mandatory exchange-side Stop-Loss attached atomically
@@ -418,7 +458,10 @@ def run_alpaca_paper_cycle() -> None:
                 "risk_usd": risk_usd,
                 "entry_date": today_str,
             }
-            cash -= qty * entry_est
+            notional = qty * entry_est
+            cash -= notional
+            current_exposure += notional
+            current_open += 1
             state.save()
             send_telegram(f"[多] {sym}, 预估价 ${entry_est}\n止损 ${stop_p}, 数量 {qty} 股 (风险 ${risk_usd})\n策略 SW-04 ({mode})")
         except Exception as e:

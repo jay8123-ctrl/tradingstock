@@ -91,7 +91,14 @@ def run_all_tests() -> None:
         assert paper_bot.INCIDENTS_MD.exists()
         print(f"[PASS] Test 7: Hourly Health Check caught missing stop + stale heartbeat ({issues})")
 
-    print("\nALL 7 DAY-5 FAULT TESTS PASSED!")
+        # TEST 8: Risk wall integration (risk/engine.py enforces max positions, daily loss, and HWM DD)
+        q_max, _ = paper_bot.calculate_position_size(1000.0, 500.0, 50.0, 45.0, symbol="SPY", open_positions=4)
+        q_loss, _ = paper_bot.calculate_position_size(1000.0, 1000.0, 50.0, 45.0, symbol="SPY", pnl_today=-50.0)
+        q_dd, _ = paper_bot.calculate_position_size(850.0, 850.0, 50.0, 45.0, symbol="SPY", high_water_mark=1000.0)
+        assert q_max == 0 and q_loss == 0 and q_dd == 0, f"Risk wall bypass detected: {(q_max, q_loss, q_dd)}"
+        print("[PASS] Test 8: paper_bot.calculate_position_size strictly enforces risk/engine.py wall")
+
+    print("\nALL 8 DAY-5 FAULT & RISK-WALL TESTS PASSED!")
 
 
 if __name__ == "__main__":
